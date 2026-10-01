@@ -3,8 +3,10 @@ import 'package:news/Ui/home/category_details/news/news_item.dart';
 import 'package:news/Ui/widget/main_error_widget.dart';
 import 'package:news/Ui/widget/main_loading_widget.dart';
 import 'package:news/api/api_manager.dart';
+import 'package:news/api/dio/dio_manager.dart';
 import 'package:news/api/model/sources/source.dart';
 import 'package:news/utils/size_utils.dart';
+import 'package:news/api/model/sources/source_response.dart';
 
 class NewsWidget extends StatefulWidget {
   final Source source;
@@ -19,7 +21,7 @@ class _NewsWidgetState extends State<NewsWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManager.getNewsBySourceId(widget.source.id ?? ''),
+      future: DioManager().getNewsBySourceId(widget.source.id ?? ''),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           //todo : loading
@@ -29,7 +31,7 @@ class _NewsWidgetState extends State<NewsWidget> {
           return MainErrorWidget(
               errorMessage: snapshot.error.toString(),
               onPressed: () {
-                ApiManager.getNewsBySourceId(widget.source.id ?? '');
+                DioManager().getNewsBySourceId(widget.source.id ?? '');
                 setState(() {
 
                 });
@@ -50,7 +52,7 @@ class _NewsWidgetState extends State<NewsWidget> {
           );
         }else{
           //todo : server => response =>success
-          var newsList =snapshot.data?.articles ??[];
+          var newsList =snapshot.data?.articles??[];
           return newsList.isEmpty?
               Center(child: Text('No News Item Found',style: Theme.of(context).textTheme.headlineMedium,)):
             ListView.separated(

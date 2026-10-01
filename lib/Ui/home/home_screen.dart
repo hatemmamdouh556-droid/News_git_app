@@ -4,6 +4,7 @@ import 'package:news/Ui/home/drawer/home_drawer.dart';
 import 'package:news/api/model/category/category.dart';
 import 'package:news/utils/app_colors.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'category_details/category_details.dart';
 import 'category_fragment/category_fragment.dart';
 
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedCategory==null?
-          'Home':selectedCategory!.title,
+        AppLocalizations.of(context)!.home:selectedCategory!.title,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
       ),

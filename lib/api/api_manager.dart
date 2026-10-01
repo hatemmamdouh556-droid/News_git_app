@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/api/api_constant.dart';
 import 'package:news/api/api_end_point.dart';
+import 'package:news/api/dio/dio_manager.dart';
 import 'package:news/api/model/news/News_response.dart';
 import 'package:news/api/model/sources/source_response.dart';
 
@@ -29,16 +31,16 @@ class ApiManager {
 
   ///https://newsapi.org/v2/everything?q=bitcoin&apiKey=bc338605ee4f47Future<NewsResponse>35d024131386cd
   static Future<NewsResponse> getNewsBySourceId(String sourceId)async{
-    try{
+    try {
       Uri url = Uri.https(ApiConstant.baseUrl,
           ApiEndPoint.newsApi,
           {
-            'apiKey' : ApiConstant.apiKey,
-            'sources' :sourceId,
+            'apiKey': ApiConstant.apiKey,
+            'sources': sourceId,
           }
       );
       var response = await http.get(url);
-      var responseBody =response.body;
+      var responseBody = response.body;
       var json = jsonDecode(responseBody);
       return NewsResponse.fromJson(json);
     }catch(e){

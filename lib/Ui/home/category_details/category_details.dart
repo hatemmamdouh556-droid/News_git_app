@@ -4,6 +4,7 @@ import 'package:news/Ui/home/category_details/sources/source_tab.dart';
 import 'package:news/Ui/widget/main_error_widget.dart';
 import 'package:news/Ui/widget/main_loading_widget.dart';
 import 'package:news/api/api_manager.dart';
+import 'package:news/api/dio/dio_manager.dart';
 import 'package:news/api/model/category/category.dart';
 
 
@@ -19,7 +20,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManager.getSources(widget.category.id),
+      future: DioManager().getSources(widget.category.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           //todo : loading
@@ -38,9 +39,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         }else if(snapshot.data?.status !='ok'){
           //todo : server => response
           return MainErrorWidget(
-            errorMessage: snapshot.data!.massage!,
+            errorMessage: snapshot.data!.message!,
             onPressed: () {
-              ApiManager.getSources(widget.category.id);
+              DioManager().getSources(widget.category.id);
               setState(() {
 
               });

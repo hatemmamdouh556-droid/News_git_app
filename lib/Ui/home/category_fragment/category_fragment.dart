@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:news/Ui/home/category_fragment/widget/category_item.dart';
 import 'package:news/api/model/category/category.dart';
+import 'package:news/providers/app_theme_provider.dart';
+import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/size_utils.dart';
 
 typedef OnCategoryItemClick = void Function(Category);
+
 class CategoryFragment extends StatelessWidget {
-  final OnCategoryItemClick onCategoryItemClick ;
-   CategoryFragment({super.key,required this.onCategoryItemClick});
-   List<Category> categoryList = [];
+  final OnCategoryItemClick onCategoryItemClick;
+  const CategoryFragment({super.key, required this.onCategoryItemClick});
 
   @override
   Widget build(BuildContext context) {
     var height = context.height;
     var width = context.width;
-    categoryList = Category.getCategoryList(true);
+    var themeProvider = Provider.of<AppThemeProvider>(context);
+
+    var categoryList = Category.getCategoryList(context, themeProvider.isDark);
+
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -23,25 +29,25 @@ class CategoryFragment extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: height*0.02,
+        spacing: height * 0.02,
         children: [
           Text(
-            'Good Morning\nHere is Some News For You',
+            AppLocalizations.of(context)!.good_morning_here_is_some_news_for_you,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder:(context, index) {
+              itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: (){
-                    //todo :add call back
-                    onCategoryItemClick(categoryList[index]);
-                  },
-                    child: CategoryItem(category: categoryList[index ],index: index,));
+                  onTap: () => onCategoryItemClick(categoryList[index]),
+                  child: CategoryItem(
+                    category: categoryList[index],
+                    index: index,
+                  ),
+                );
               },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: height*0.02,);
-              },
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: height * 0.02),
               itemCount: categoryList.length,
             ),
           ),
